@@ -1,28 +1,28 @@
 let books = [
-    // {
-    // title: "Harry Potter",
-    // author: "JK Rowling",
-    // genre: "Mystery",
-    // pages: 300,
-    // read: true,
-    // id: 1597750453607,
-    // },
-    // {
-    // title: "Twilight",
-    // author: "Catherin Hardwicke",
-    // genre: "Romance",
-    // pages: 433,
-    // read: false,
-    // id: 1597750478241,
-    // },
-    // {
-    // title: "Tongavola",
-    // author: "Tambinarivo Emilio Jerome",
-    // genre: "Educative",
-    // pages: 513,
-    // read: true,
-    // id: 1597750525481,
-    // },
+    {
+    title: "Harry Potter",
+    author: "JK Rowling",
+    genre: "Mystery",
+    pages: 300,
+    read: true,
+    id: 1597750453607,
+    },
+    {
+    title: "Twilight",
+    author: "Catherin Hardwicke",
+    genre: "Romance",
+    pages: 433,
+    read: false,
+    id: 1597750478241,
+    },
+    {
+    title: "Tongavola",
+    author: "Tambifelana Emilio Jerome",
+    genre: "Educative",
+    pages: 513,
+    read: true,
+    id: 1597750525481,
+    },
 ];
 
 // add an element to the list with the form
@@ -38,6 +38,15 @@ const form = document.querySelector('form');
 const tableList = document.querySelector('tbody');
 
 const showBooks = () => {
+    // We can use an image instead of checkbox
+    // <img ${book.read ? '' : 'hidden'}
+    // src="./assets/icons/checked.svg"
+    // alt="the book ${book.title} is read"/>
+
+    // <img ${book.read ? 'hidden' : ''}
+    // src="./assets/icons/unchecked.svg"
+    // alt="the book ${book.title} is not yet read"/>
+
     const html = books.map(book => {
         return  `
         <tr>
@@ -50,13 +59,7 @@ const showBooks = () => {
                 value="${book.id}"
                 class="check"
                 area-label="Update read attribute of ${book.title}">
-                    <img ${book.read ? '' : 'hidden'}
-                    src="./assets/icons/checked.svg"
-                    alt="the book ${book.title} is read"/>
-
-                    <img ${book.read ? 'hidden' : ''}
-                    src="./assets/icons/unchecked.svg"
-                    alt="the book ${book.title} is not yet read"/>
+                    <input type="checkbox" ${book.read ? 'checked' : ''}>
                 </button>
             </td>
             <td>
@@ -74,7 +77,7 @@ const showBooks = () => {
     }).join('');
     tableList.innerHTML = html;
 };
-// showBooks();
+showBooks();
 
 const addBook = e => {
     e.preventDefault();
@@ -85,7 +88,7 @@ const addBook = e => {
         author: formEl.author.value,
         genre: formEl.genre.value,
         pages: formEl.pages.value,
-        read: formEl.read.value === true,
+        read: formEl.read.checked,
         id: Date.now(),
     };
     console.log(newBook);
@@ -106,14 +109,14 @@ const handleClick = e => {
     // Delete book
     const deleteBtn = e.target.closest('button.delete');
     if (deleteBtn) {
-        const id = Number(deleteBook.value);
+        const id = Number(deleteBtn.value);
         console.log('DELETE THAT BOOK PLEASE');
         deleteBook(id);
     }
 };
 
-const deleteBook = idToDelete => {
-    books = books.filter(book => book.id !== idToDelete);
+const deleteBook = id => {
+    books = books.filter(book => book.id !== id);
     tableList.dispatchEvent(new CustomEvent('listUpdate'));
 };
 
